@@ -15,6 +15,8 @@ namespace cursachMVC
             this.controller = controller;
             game = new Game(controller.mode, controller.map);
             controller.GridClick += new EventHandler<EventArgs>(GridClick);
+            controller.OnStopTimer += new EventHandler<EventArgs>(StopTimer);
+            game.isPlaying = true;
         }
 
         private void GridClick(object sender, EventArgs e)
@@ -24,7 +26,15 @@ namespace cursachMVC
             if (game.isWin)
             {
                 controller.EnabledButtons(false);
+                game.isWin = false;
             }
+        }
+        private void StopTimer (object sender, EventArgs e)
+        {
+            game.isPlaying = false;
+            controller.StopTimer();
+            game.CountPoints();
+
         }
     }
 }

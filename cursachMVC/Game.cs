@@ -13,15 +13,21 @@ namespace cursachMVC
         Grid[,] gameMap;
         IPlayer firstPlayer;
         IPlayer secondPlayer;
-        public bool isWin { get; private set; }
+        public bool isPlaying { get; set; }
+        public bool isWin { get; set; }
         public Game(string mode, Grid[,] gameMap)
         {
             this.mode = mode;
             this.gameMap = gameMap;
-            //if (mode == "two")
-            //{
+            /*if (mode == "two")
+            {*/
                 firstPlayer = new Player("X");
-            //}
+            /*}
+            else if (mode == "single")
+            {
+                firstPlayer = new EnemyBot();
+                secondPlayer = new Player("0");
+            }*/
         }
 
         public void GridClick(object sender, EventArgs e)
@@ -30,24 +36,65 @@ namespace cursachMVC
             if (firstPlayer.hod == "X")
             {
                 grid.Text = firstPlayer.hod;
-                if (IsWin(firstPlayer.hod))
+                CountPoints();
+                if (mode.IndexOf('r') == -1)
                 {
-                    isWin = true;
-                    MessageBox.Show($"Гравець {firstPlayer.hod} виграв");
+                    if (IsWin(firstPlayer.hod))
+                    {
+                        isWin = true;
+                        MessageBox.Show($"Гравець {firstPlayer.hod} виграв");
+                        
+                    }
                 }
-                firstPlayer.hod = "0";
+                if (isWin) 
+                    firstPlayer.hod = "X";
+                else 
+                    firstPlayer.hod = "0";
             }
             else
             {
                 grid.Text = firstPlayer.hod;
-                if (IsWin(firstPlayer.hod))
+                CountPoints();
+                if (mode.IndexOf('r') == -1)
                 {
-                    isWin = true;
-                    MessageBox.Show($"Гравець {firstPlayer.hod} виграв");
+                    if (IsWin(firstPlayer.hod))
+                    {
+                        isWin = true;
+                        MessageBox.Show($"Гравець {firstPlayer.hod} виграв");
+                    }
                 }
-                firstPlayer.hod = "X";
+                /*if (isWin)
+                    firstPlayer.hod = "0";*/
+                /*else*/
+                    firstPlayer.hod = "X";
             }
-            
+        }
+        private void Win ()
+        {
+
+        }
+        public void CountPoints ()
+        {
+            int countX=0, count0 = 0;
+            if (!isPlaying)
+            {
+                while (IsWin("X")==true)
+                {
+                    countX++;
+                }
+                while (IsWin("0")==true)
+                {
+                    count0++;
+                }
+                if (countX>count0)
+                {
+                    MessageBox.Show($"Гравець X вигравc");
+                }
+                else
+                {
+                    MessageBox.Show($"Гравець 0 вигравc");
+                }
+            }
         }
         private bool IsWin(string hod)
         {
@@ -55,41 +102,47 @@ namespace cursachMVC
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    if (gameMap[i, j].Text == hod && gameMap[i + 1, j].Text == hod && gameMap[i + 2, j].Text == hod && gameMap[i + 3, j].Text == hod && gameMap[i + 4, j].Text == hod)
+                    try
                     {
-                        gameMap[i, j].Text = "";
-                        gameMap[i + 1, j].Text = "";
-                        gameMap[i + 2, j].Text = "";
-                        gameMap[i + 3, j].Text = "";
-                        gameMap[i + 4, j].Text = "";
-                        return true;
-                    }
-                    else if (gameMap[i, j].Text == hod && gameMap[i, j + 1].Text == hod && gameMap[i, j + 2].Text == hod && gameMap[i, j + 3].Text == hod && gameMap[i, j + 4].Text == hod)
+                        if (gameMap[i, j].Text == hod && gameMap[i + 1, j].Text == hod && gameMap[i + 2, j].Text == hod && gameMap[i + 3, j].Text == hod && gameMap[i + 4, j].Text == hod)
+                        {
+                            gameMap[i, j].Text = "";
+                            gameMap[i + 1, j].Text = "";
+                            gameMap[i + 2, j].Text = "";
+                            gameMap[i + 3, j].Text = "";
+                            gameMap[i + 4, j].Text = "";
+                            return true;
+                        }
+                        else if (gameMap[i, j].Text == hod && gameMap[i, j + 1].Text == hod && gameMap[i, j + 2].Text == hod && gameMap[i, j + 3].Text == hod && gameMap[i, j + 4].Text == hod)
+                        {
+                            gameMap[i, j].Text = "";
+                            gameMap[i, j + 1].Text = "";
+                            gameMap[i, j + 2].Text = "";
+                            gameMap[i, j + 3].Text = "";
+                            gameMap[i, j + 4].Text = "";
+                            return true;
+                        }
+                        else if (gameMap[i, j].Text == hod && gameMap[i + 1, j + 1].Text == hod && gameMap[i + 2, j + 2].Text == hod && gameMap[i + 3, j + 3].Text == hod && gameMap[i + 4, j + 4].Text == hod)
+                        {
+                            gameMap[i, j].Text = "";
+                            gameMap[i + 1, j + 1].Text = "";
+                            gameMap[i + 2, j + 2].Text = "";
+                            gameMap[i + 3, j + 3].Text = "";
+                            gameMap[i + 4, j + 4].Text = "";
+                            return true;
+                        }
+                        else if (gameMap[i, j].Text == hod && gameMap[i + 1, j - 1].Text == hod && gameMap[i + 2, j - 2].Text == hod && gameMap[i + 3, j - 3].Text == hod && gameMap[i + 4, j - 4].Text == hod)
+                        {
+                            gameMap[i, j].Text = "";
+                            gameMap[i + 1, j - 1].Text = "";
+                            gameMap[i + 2, j - 2].Text = "";
+                            gameMap[i + 3, j - 3].Text = "";
+                            gameMap[i + 4, j - 4].Text = "";
+                            return true;
+                        }
+                    }catch (NullReferenceException e)
                     {
-                        gameMap[i, j].Text = "";
-                        gameMap[i, j + 1].Text = "";
-                        gameMap[i, j + 2].Text = "";
-                        gameMap[i, j + 3].Text = "";
-                        gameMap[i, j + 4].Text = "";
-                        return true;
-                    }
-                    else if (gameMap[i, j].Text == hod && gameMap[i + 1, j + 1].Text == hod && gameMap[i + 2, j + 2].Text == hod && gameMap[i + 3, j + 3].Text == hod && gameMap[i + 4, j + 4].Text == hod)
-                    {
-                        gameMap[i, j].Text = "";
-                        gameMap[i + 1, j + 1].Text = "";
-                        gameMap[i + 2, j + 2].Text = "";
-                        gameMap[i + 3, j + 3].Text = "";
-                        gameMap[i + 4, j + 4].Text = "";
-                        return true;
-                    }
-                    else if (gameMap[i, j].Text == hod && gameMap[i + 1, j - 1].Text == hod && gameMap[i + 2, j - 2].Text == hod && gameMap[i + 3, j - 3].Text == hod && gameMap[i + 4, j - 4].Text == hod)
-                    {
-                        gameMap[i, j].Text = "";
-                        gameMap[i + 1, j - 1].Text = "";
-                        gameMap[i + 2, j - 2].Text = "";
-                        gameMap[i + 3, j - 3].Text = "";
-                        gameMap[i + 4, j - 4].Text = "";
-                        return true;
+                        continue;
                     }
                 }
             }

@@ -18,27 +18,28 @@ namespace cursachMVC
             StartPosition = FormStartPosition.CenterScreen;
             gameMode = mode;
             InitMap();
-            /*if (gameMode.IndexOf(' ') != -1 && gameMode.IndexOf("two") != -1) //гра вдвох на одному компі з таймером
+            if (gameMode.IndexOf(' ') != -1 && gameMode.IndexOf("two") != -1) //гра вдвох на одному компі з таймером
             {
                 InitTimer();
             }
-            else if (gameMode == "two") //гра вдвох на одному компі без таймера
+            else if (gameMode == "two ") //гра вдвох на одному компі без таймера
             {
 
             }
-            else if (gameMode == "single")  //гра з ботом без таймеру
+            else if (gameMode == "single ")  //гра з ботом без таймеру
             {
 
             }
             else  //гра з ботом з таймером
             {
                 InitTimer();
-            }*/
-            if (gameMode.IndexOf(' ') != -1)
+            }
+            if (gameMode.IndexOf("r") == -1)
             {
                 timer = new Timer();
             }
         }
+
         Grid[,] gameMap;
         Size sizeGrid;
         Panel mapPanel;
@@ -50,6 +51,7 @@ namespace cursachMVC
         Timer timer;
         Label timeLabel;
         private bool isFirshHod;
+        Button exit;
         private void InitMap ()
         {
             sizeGrid = new Size(30, 30);
@@ -73,6 +75,12 @@ namespace cursachMVC
             startButton.Location = new Point(mapPanel.Width+30, 30);
             startButton.Parent = this;
             startButton.Click += new EventHandler(OnStartButtonClick);
+            exit = new Button();
+            exit.Text = "Вийти з гри";
+            exit.Size = new Size(80, 35);
+            exit.Location = new Point(mapPanel.Width + 30, this.Height-160);
+            exit.Parent = this;
+            exit.Click += new EventHandler(OnExit);
             for (int i = 0; i < sizeMap; i++)
             {
                 for (int j = 0; j < sizeMap; j++)
@@ -86,6 +94,12 @@ namespace cursachMVC
                 }
             }
         }
+
+        public void OnExit(object sender, EventArgs e)
+        {
+           Application.Exit();
+        }
+
         private void InitTimer ()
         {
             timer = new Timer();
@@ -96,7 +110,7 @@ namespace cursachMVC
             timeLabel.Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Regular);
             timer.Tick += new EventHandler(timerTick);
             timer.Interval = 1000;
-            countSecond = 4;
+            countSecond = 20;
         }
         private int countSecond;
         private void timerTick(object sender, EventArgs e)
@@ -104,15 +118,16 @@ namespace cursachMVC
             timeLabel.Text = $"00 : {countSecond}";
             if (countSecond == 0)
             {
-                timer.Stop();
+                OnStopTimer(sender, e);
                 isPlaying = false;
                 EnabledButtons(false);
             }
             countSecond--;
         }
-
-        
-
+        public void StopTimer ()
+        {
+            timer.Enabled = false;
+        }
         private void OnStartButtonClick(object sender, EventArgs e)
         {
             isFirshHod = true;
@@ -171,9 +186,11 @@ namespace cursachMVC
                 }
             }            
         }
-
+        
         public event EventHandler<EventArgs> GridClick;
         public event EventHandler<EventArgs> StartGame;
+        public event EventHandler<EventArgs> OnStopTimer;
+
         public void Hod(Grid grid)
         {
             gameMap[grid.indexY, grid.indexX].Text = "";

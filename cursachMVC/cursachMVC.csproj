@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnemyBot.cs" />
+    <Compile Include="ExitPres.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +65,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IController.cs" />
+    <Compile Include="IExit.cs" />
     <Compile Include="IPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Presenter.cs" />
