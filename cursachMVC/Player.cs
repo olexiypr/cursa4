@@ -8,11 +8,14 @@ namespace cursachMVC
 {
     internal class Player : IPlayer
     {
-        string hod { get; set; }
+        public string hod { get; set; }
         public Player(string hod)
         {
             this.hod = hod;
         }
-        string IPlayer.hod { get => hod; set => hod = value; }
+        public void Hod()
+        {
+            
+        }
     }
 }

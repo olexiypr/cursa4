@@ -29,7 +29,7 @@ namespace cursachMVC
         {
             mode = "two ";
             if (timerCheckBox.Checked)
-            mode += "timer";
+                mode += "timer";
             this.Hide();
             GameForm gameForm = new GameForm(mode);
             Presenter presenter = new Presenter(gameForm);

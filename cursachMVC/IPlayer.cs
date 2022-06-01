@@ -8,7 +8,7 @@ namespace cursachMVC
 {
     internal interface IPlayer
     {
-        //void Hod();
+        void Hod();
         string hod { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace cursachMVC
         public Presenter(IController controller)
         {
             this.controller = controller;
-            game = new Game(controller.mode, controller.map);
+            game = new Game(controller.gameMode, controller.gameMap);
             controller.GridClick += new EventHandler<EventArgs>(GridClick);
             controller.OnStopTimer += new EventHandler<EventArgs>(StopTimer);
             game.isPlaying = true;
