@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace cursachMVC
 {
-    internal interface IPlayer
+    internal interface IPlayer  //інтерфейс гравця
     {
-        void Hod();
-        string hod { get; set; }
+        void Move();  //метод для ходу
+        string move { get; set; }  //поле яке визначає за кого буде грати гравець
     }
 }

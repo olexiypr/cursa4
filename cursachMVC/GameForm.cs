@@ -10,13 +10,14 @@ using System.Windows.Forms;
 
 namespace cursachMVC
 {
-    public partial class GameForm : Form, IController
+    public partial class GameForm : Form, IController  //форма де відбувається гра
     {
         public GameForm(string mode)
         {
             InitializeComponent();
             this.ControlBox = false;
             StartPosition = FormStartPosition.CenterScreen;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             gameMode = mode;
             InitMap();
             if (gameMode == "two timer") //гра вдвох на одному компі з таймером
@@ -27,170 +28,129 @@ namespace cursachMVC
             {
                 InitTimer();
             }
-            if (gameMode.IndexOf("r") == -1)
+            if (gameMode.IndexOf("r") == -1) //гра без таймеру
             {
-                timer = new Timer();
+                _timer = new Timer();
             }
         }
+        public Grid[,] gameMap { get; private set; }  //ігрове поле
+        private Size _sizeGrid;  //розмір клітинки поля
+        private Panel _mapPanel;  //панель на якій розміщується поле
+        private Button _startButton; //кнопка для запуску гри
+        private Timer _timer;  //таймер
+        private Label _timeLabel;  //поле для виведення часу
+        private Button _exitButton; //кнопка виходу з програми
 
-        public Grid[,] gameMap { get; private set; }
-        Size sizeGrid;
-        Panel mapPanel;
-        Panel controlsPanel;
-        Button startButton;
-        Timer timer;
-        Label timeLabel;
-        Button exit;
-        public string gameMode { get; private set; }
-        private bool isFirshHod;
-        int sizeMap;
-        private int countSecond;
-
-        public event EventHandler<EventArgs> GridClick;
-        public event EventHandler<EventArgs> OnStopTimer;
-        //public event EventHandler<EventArgs> StartGame;
-        //public Grid[,] map { get => gameMap; }
-        //public string mode => gameMode;
-
-        private void InitMap ()
+        //ігровий режим (людина проти комп'ютера, людина проти комп'ютера з таймером,
+        //людина проти людиин, людина проти людиин з таймером)
+        public string gameMode { get; private set; }  
+        private bool _isFirshHod;  //змінна для визначення чи був здійснений перший хід
+        private int _sizeMap;  //розмір ігрового поля
+        private int _countSecond;  //кількість секунд таймера
+        public event EventHandler<EventArgs> OnGridClick;  //подія на натискання на игрове поле
+        public event EventHandler<EventArgs> OnStopTimer;  //подія зупинки таймера
+        private void InitMap ()  //створення ігрового поля і інтерфейсу
         {
-            sizeGrid = new Size(30, 30);
-            sizeMap = 20;
-            mapPanel = new Panel ();
-            controlsPanel = new Panel ();
-            gameMap = new Grid[sizeMap, sizeMap];
-            startButton = new Button();
-            this.Width = (sizeGrid.Width + 10) * sizeMap;
-            this.Height = (sizeGrid.Height) * sizeMap+50;
-            mapPanel.Location = new Point(0, 0);
-            mapPanel.Size = new Size(sizeGrid.Width*sizeMap+10, this.Height);
-            mapPanel.Parent = this;
-            startButton.Text = "Почати гру";
-            startButton.Size = new Size(80, 35);
-            startButton.Location = new Point(mapPanel.Width+30, 30);
-            startButton.Parent = this;
-            startButton.Click += new EventHandler(OnStartButtonClick);
-            exit = new Button();
-            exit.Text = "Вийти з гри";
-            exit.Size = new Size(80, 35);
-            exit.Location = new Point(mapPanel.Width + 30, this.Height-160);
-            exit.Parent = this;
-            exit.Click += new EventHandler(OnExit);
-            for (int i = 0; i < sizeMap; i++)
+            _sizeGrid = new Size(30, 30);
+            _sizeMap = 20;
+            _mapPanel = new Panel ();
+            gameMap = new Grid[_sizeMap, _sizeMap];
+            _startButton = new Button();
+            this.Width = (_sizeGrid.Width + 10) * _sizeMap;
+            this.Height = (_sizeGrid.Height) * _sizeMap+50;
+            _mapPanel.Location = new Point(0, 0);
+            _mapPanel.Size = new Size(_sizeGrid.Width*_sizeMap+10, this.Height);
+            _mapPanel.Parent = this;
+            _startButton.Text = "Почати гру";
+            _startButton.Size = new Size(80, 35);
+            _startButton.Location = new Point(_mapPanel.Width+30, 30);
+            _startButton.Parent = this;
+            _startButton.Click += new EventHandler(OnStartButtonClick);
+            _exitButton = new Button();
+            _exitButton.Text = "Вийти з гри";
+            _exitButton.Size = new Size(80, 35);
+            _exitButton.Location = new Point(_mapPanel.Width + 30, this.Height-160);
+            _exitButton.Parent = this;
+            _exitButton.Click += new EventHandler(OnExit);
+            for (int i = 0; i < _sizeMap; i++)
             {
-                for (int j = 0; j < sizeMap; j++)
+                for (int j = 0; j < _sizeMap; j++)
                 {
                     gameMap[i, j] = new Grid(i,j);
-                    gameMap[i, j].Size = sizeGrid;
-                    gameMap[i, j].Location = new Point(sizeGrid.Width * j + 5, sizeGrid.Width * i + 5);
-                    gameMap[i, j].Parent = mapPanel;
+                    gameMap[i, j].Size = _sizeGrid;
+                    gameMap[i, j].Location = new Point(_sizeGrid.Width * j + 5, _sizeGrid.Width * i + 5);
+                    gameMap[i, j].Parent = _mapPanel;
                     gameMap[i, j].Click += new EventHandler(OnClickGrid);
                     gameMap[i, j].Enabled = false;
                 }
             }
         }
 
-        public void OnExit(object sender, EventArgs e)
+        public void OnExit(object sender, EventArgs e)  //закриття програми
         {
            Application.Exit();
         }
 
-        private void InitTimer ()
+        private void InitTimer ()  //створення таймера
         {
-            timer = new Timer();
-            timeLabel = new Label();
-            timeLabel.Size = new Size(this.Width - mapPanel.Width - 30, 60);
-            timeLabel.Location = new Point (mapPanel.Width + 20, 140);
-            timeLabel.Parent = this;
-            timeLabel.Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Regular);
-            timer.Tick += new EventHandler(TimerTick);
-            timer.Interval = 1000;
-            countSecond = 30;
+            _timer = new Timer();
+            _timeLabel = new Label();
+            _timeLabel.Size = new Size(this.Width - _mapPanel.Width - 30, 60);
+            _timeLabel.Location = new Point (_mapPanel.Width + 20, 140);
+            _timeLabel.Parent = this;
+            _timeLabel.Font = new Font(FontFamily.GenericSansSerif, 25, FontStyle.Regular);
+            _timer.Tick += new EventHandler(TimerTick);
+            _timer.Interval = 1000;
+            _countSecond = 30;
         }
         
-        private void TimerTick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)  //виведення часу таймера
         {
-            timeLabel.Text = $"00 : {countSecond}";
-            if (countSecond == 0)
+            _timeLabel.Text = $"00 : {_countSecond}";
+            if (_countSecond == 0)
             {
                 OnStopTimer(sender, e);  
                 EnabledButtons(false);
             }
-            countSecond--;
+            _countSecond--;
         }
-        public void StopTimer ()
+        public void StopTimer ()  //зупинка таймера
         {
-            timer.Enabled = false;
+            _timer.Enabled = false;
         }
-        private void OnStartButtonClick(object sender, EventArgs e)
+        private void OnStartButtonClick(object sender, EventArgs e) //початок гри
         {
-            isFirshHod = true;
+            _isFirshHod = true;
             Button grid = (Button)sender;
             EnabledButtons(true);
             if (gameMode.IndexOf(' ')!=-1)
-                timer.Enabled = true;
+                _timer.Enabled = true;
             Reset();
             if (gameMode.IndexOf("single") != -1)
             {
-                gameMap[sizeMap / 2, sizeMap / 2].Text = "X";
-                gameMap[sizeMap / 2, sizeMap / 2].BackColor = Color.Green;
+                gameMap[_sizeMap / 2, _sizeMap / 2].Text = "X";
+                gameMap[_sizeMap / 2, _sizeMap / 2].BackColor = Color.Green;
                 EnabledButtons(false);
-                DisableButtonsAfterHod(new Grid(sizeMap/2, sizeMap / 2));
-                isFirshHod = false;
+                DisableButtonsAfterHod(new Grid(_sizeMap/2, _sizeMap / 2));
+                _isFirshHod = false;
             }
         }
-        private void OnClickGrid(object sender, EventArgs e)
+        private void OnClickGrid(object sender, EventArgs e)  //дія при натисканні на клітинку ігрового поля
         {
             Grid grid = (Grid)sender;
-            if (isFirshHod)
+            if (_isFirshHod)
             {
                 EnabledButtons(false);
-                isFirshHod=false;
+                _isFirshHod = false;
             }
             DisableButtonsAfterHod(grid);
-            //MapExtension(grid);
-            GridClick(sender, e);
+            OnGridClick(sender, e);
         }
-        private void MapExtension (Grid move)
+        private void DisableButtonsAfterHod(Grid grid)  //обмеження доступних клітинок для ходу
         {
-            if (move.indexX < 5 || move.indexY<5 || move.indexX > 15 || move.indexY > 15)
+            for (int i = 0; i < _sizeMap; i++)
             {
-                this.Width += sizeGrid.Width * 10;
-                this.Height += sizeGrid.Width * 10;
-                Grid[,] tempMap = gameMap;
-                sizeMap += 8;
-                mapPanel.Location = new Point((sizeGrid.Width + 5) * 4, (sizeGrid.Width + 5) * 4);
-                mapPanel.Size = new Size((sizeGrid.Width + 5) * 28, (sizeGrid.Width + 5) * 28);
-                gameMap = new Grid[sizeMap, sizeMap];
-                for (int i = 0; i < gameMap.GetLength(0); i++)
-                {
-                    for (int j = 0; j < gameMap.GetLength(1); j++)
-                    {
-                        gameMap[i, j] = new Grid(i, j);
-                        gameMap[i, j].Size = sizeGrid;
-                        gameMap[i, j].Location = new Point(sizeGrid.Width * j + 5, sizeGrid.Width * i + 5);
-                        gameMap[i, j].Parent = mapPanel;
-                        gameMap[i, j].Click += new EventHandler(OnClickGrid);
-                        gameMap[i, j].Enabled = false;
-                    }
-                }
-                for (int i = 0; i < sizeMap; i++)
-                {
-                    for (int j = 0; j < sizeMap; j++)
-                    {
-                        /*gameMap[i, j].Location = new Point(gameMap[i, j].indexX += (sizeGrid.Width + 5) * 5, gameMap[i, j].indexY += (sizeGrid.Width + 5) * 5);*/
-                        if (i < 20 || j< 20)
-                            gameMap[i+sizeMap/2, j+sizeMap/2] = tempMap[i, j];
-                    }
-                }
-                 
-            }
-        }
-        private void DisableButtonsAfterHod(Grid grid)
-        {
-            for (int i = 0; i < sizeMap; i++)
-            {
-                for (int j = 0; j < sizeMap; j++)
+                for (int j = 0; j < _sizeMap; j++)
                 {
                     if (i >= grid.indexY - 5 && i <= grid.indexY + 5 && j >= grid.indexX - 5 && j <= grid.indexX + 5 && gameMap[i, j].Text == "")
                         gameMap[i, j].Enabled = true;
@@ -198,27 +158,27 @@ namespace cursachMVC
             }
             grid.Enabled = false;
         }
-        public void EnabledButtons(bool status)
+        public void EnabledButtons(bool status)  //вимкнення або увімкнення всіх кнопок 
         {
-            for (int i = 0; i < sizeMap; i++)
+            for (int i = 0; i < _sizeMap; i++)
             {
-                for (int j = 0; j < sizeMap; j++)
+                for (int j = 0; j < _sizeMap; j++)
                 {
                     gameMap[i, j].Enabled = status;
                 }
             }
         }
-        public void Reset ()
+        public void Reset ()  //очищення ігрового поля для початку гри заново 
         {
-            for (int i = 0; i < sizeMap; i++)
+            for (int i = 0; i < _sizeMap; i++)
             {
-                for (int j = 0; j < sizeMap; j++)
+                for (int j = 0; j < _sizeMap; j++)
                 {
                     gameMap[i, j].Text = "";
                     gameMap[i, j].BackColor = Color.White;
                 }
             }
-            countSecond = 30;
+            _countSecond = 30;
         }
         
     }

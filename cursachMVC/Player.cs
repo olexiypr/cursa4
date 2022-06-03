@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace cursachMVC
 {
-    internal class Player : IPlayer
+    internal class Player : IPlayer  //гравець (людина)
     {
-        public string hod { get; set; }
+        public string move { get; set; } 
         public Player(string hod)
         {
-            this.hod = hod;
+            this.move = hod;
         }
-        public void Hod()
+        public void Move()
         {
             
         }

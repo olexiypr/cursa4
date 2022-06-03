@@ -15,10 +15,9 @@ namespace cursachMVC
         public Form1()
         {
             InitializeComponent();
-
             Init();
         }
-        string mode;
+        string _gameMode;
         private void Init ()
         {
             singleGameButton.Click += new EventHandler(OnClickSingleGameButton);
@@ -27,22 +26,22 @@ namespace cursachMVC
 
         private void OnClickTwoPlayersButton(object sender, EventArgs e)
         {
-            mode = "two ";
+            _gameMode = "two ";
             if (timerCheckBox.Checked)
-                mode += "timer";
+                _gameMode += "timer";
             this.Hide();
-            GameForm gameForm = new GameForm(mode);
+            GameForm gameForm = new GameForm(_gameMode);
             Presenter presenter = new Presenter(gameForm);
             gameForm.ShowDialog();
         }
 
         private void OnClickSingleGameButton(object sender, EventArgs e)
         {
-            mode = "single ";
+            _gameMode = "single ";
             if (timerCheckBox.Checked)
-                mode += "timer";
+                _gameMode += "timer";
             this.Hide();
-            GameForm gameForm = new GameForm(mode);
+            GameForm gameForm = new GameForm(_gameMode);
             Presenter presenter = new Presenter(gameForm);
             gameForm.ShowDialog();
         }

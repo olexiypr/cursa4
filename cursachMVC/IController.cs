@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace cursachMVC
 {
-    internal interface IController
+    internal interface IController  //інтерфейс для передавання і виведення даних з гри на форму
     {
-        event EventHandler<EventArgs> GridClick;
+        event EventHandler<EventArgs> OnGridClick;
         //event EventHandler<EventArgs> StartGame;
         event EventHandler<EventArgs> OnStopTimer;
-        //void Hod();
-        //string hod { get; set; }
         string gameMode { get; }
         Grid [,] gameMap { get; }
         void EnabledButtons(bool status);
