@@ -1,0 +1,12 @@
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\bin\Release\cursachMVC.exe.config
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\bin\Release\cursachMVC.exe
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\bin\Release\cursachMVC.pdb
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.csproj.AssemblyReference.cache
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.csproj.SuggestedBindingRedirects.cache
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.Form1.resources
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.GameForm.resources
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.Properties.Resources.resources
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.csproj.GenerateResource.cache
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.csproj.CoreCompileInputs.cache
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.exe
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Release\cursachMVC.pdb

@@ -20,17 +20,9 @@ namespace cursachMVC
             FormBorderStyle = FormBorderStyle.FixedDialog;
             gameMode = mode;
             InitMap();
-            if (gameMode == "two timer") //гра вдвох на одному компі з таймером
+            if (gameMode == "two timer" || gameMode == "single timer") //гра вдвох на одному компі з таймером
             {
                 InitTimer();
-            }
-            else if (gameMode == "single timer")     //гра з ботом з таймером
-            {
-                InitTimer();
-            }
-            if (gameMode.IndexOf("r") == -1) //гра без таймеру
-            {
-                _timer = new Timer();
             }
         }
         public Grid[,] gameMap { get; private set; }  //ігрове поле
@@ -123,7 +115,7 @@ namespace cursachMVC
             _isFirshHod = true;
             Button grid = (Button)sender;
             EnabledButtons(true);
-            if (gameMode.IndexOf(' ')!=-1)
+            if (gameMode.IndexOf("timer") !=-1)
                 _timer.Enabled = true;
             Reset();
             if (gameMode.IndexOf("single") != -1)
@@ -131,7 +123,7 @@ namespace cursachMVC
                 gameMap[_sizeMap / 2, _sizeMap / 2].Text = "X";
                 gameMap[_sizeMap / 2, _sizeMap / 2].BackColor = Color.Green;
                 EnabledButtons(false);
-                DisableButtonsAfterHod(new Grid(_sizeMap/2, _sizeMap / 2));
+                DisableButtonsAfterMove(new Grid(_sizeMap/2, _sizeMap / 2));
                 _isFirshHod = false;
             }
         }
@@ -143,10 +135,10 @@ namespace cursachMVC
                 EnabledButtons(false);
                 _isFirshHod = false;
             }
-            DisableButtonsAfterHod(grid);
+            DisableButtonsAfterMove(grid);
             OnGridClick(sender, e);
         }
-        private void DisableButtonsAfterHod(Grid grid)  //обмеження доступних клітинок для ходу
+        private void DisableButtonsAfterMove(Grid grid)  //обмеження доступних клітинок для ходу
         {
             for (int i = 0; i < _sizeMap; i++)
             {
