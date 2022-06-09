@@ -3,10 +3,10 @@ C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\bin\Debug\cursachMVC.exe
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\bin\Debug\cursachMVC.pdb
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.csproj.AssemblyReference.cache
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.csproj.SuggestedBindingRedirects.cache
-C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.Form1.resources
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.Properties.Resources.resources
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.csproj.GenerateResource.cache
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.csproj.CoreCompileInputs.cache
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.exe
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.pdb
 C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.GameForm.resources
+C:\Users\alosh\source\repos\C#\cursachMVC\cursachMVC\obj\Debug\cursachMVC.MenuForm.resources

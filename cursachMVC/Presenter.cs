@@ -16,13 +16,14 @@ namespace cursachMVC
             game = new Game(controller.gameMode, controller.gameMap);
             controller.OnGridClick += new EventHandler<EventArgs>(GridClick);
             controller.OnStopTimer += new EventHandler<EventArgs>(StopTimer);
-            game.isPlaying = true;
         }
         //в цьому методі відбувається обробка результату натискання на кнопку ігрового поля та передачі в форму
         //для виведення на екран
         private void GridClick(object sender, EventArgs e)
         {
             Grid grid = (Grid)sender;
+            if (controller.isFirstMove == true)
+                game.queue = true;
             game.GridClick(sender, e);
             if (game.isWin)
             {
@@ -33,7 +34,6 @@ namespace cursachMVC
         //у цьому методі обробляється зупинка таймера
         private void StopTimer (object sender, EventArgs e)
         {
-            game.isPlaying = false;
             controller.StopTimer();
             game.CountPoints();  //метод підрахунку кількості балів
         }

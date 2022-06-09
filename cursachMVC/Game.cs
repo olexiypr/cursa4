@@ -13,14 +13,14 @@ namespace cursachMVC
         private Grid[,] gameMap;
         private IPlayer _firstPlayer;
         private IPlayer _secondPlayer;
-        private bool _queue; //змінна яка служить для чередування ходів
-        public bool isPlaying { get; set; }
+        public bool queue { get; set; } //змінна яка служить для чередування ходів
+        //public bool isPlaying { get; set; }
         public bool isWin { get; set; }
         public Game(string mode, Grid[,] gameMap)
         {
             _gameMode = mode;
             this.gameMap = gameMap;
-            _queue = true;
+            queue = true;
             _secondPlayer = new Player("X");
             //створення гравців залежно від режиму гри
             if (mode == "two ")
@@ -45,41 +45,38 @@ namespace cursachMVC
             }
         }
         //метод в якому визначається черга ходу, переможець
+        private void Move(Grid grid, IPlayer player)
+        {
+            grid.Text = player.move;
+            
+            if (_gameMode.IndexOf('r') == -1)  //якщо гра не на таймер після кожного ходу перевіряється чи виграв гравець який походив
+            {
+                if (IsWin(player.move))
+                {
+                    isWin = true;
+                    queue = true;
+                    MessageBox.Show($"Гравець {player.move} виграв");
+                    return;
+                }
+            }
+        }
         public void GridClick(object sender, EventArgs e)
         {
             Grid grid = (Grid)sender;
             if (_gameMode.IndexOf("two") != -1)  //гра з іншим гравцем
             {
-                if (_queue)  //хід першого або другого гравця
+                if (queue)  //хід першого або другого гравця
                 {
-                    grid.Text = _firstPlayer.move;
                     grid.BackColor = Color.Green;
-                    if (_gameMode.IndexOf('r') == -1)  //якщо гра не на таймер після кожного ходу перевіряється чи виграв гравець який походив
-                    {
-                        if (IsWin(_firstPlayer.move))
-                        {
-                            isWin = true;
-                            _queue = true;
-                            MessageBox.Show($"Гравець {_firstPlayer.move} виграв");
-                            return;
-                        }
-                    }
-                    _queue = false;
+                    queue = false;
+                    Move(grid, _firstPlayer);
+                    
                 }
                 else
                 {
-                    grid.Text = _secondPlayer.move;
-                    if (_gameMode.IndexOf('r') == -1)
-                    {
-                        if (IsWin(_secondPlayer.move))
-                        {
-                            isWin = true;
-                            _queue = true;
-                            MessageBox.Show($"Гравець {_secondPlayer.move} виграв");
-                            return;
-                        }
-                    }
-                    _queue = true;
+                    queue = true;
+                    Move(grid, _secondPlayer);
+                    
                 }
             }
             else  //гра з ботом
@@ -100,7 +97,6 @@ namespace cursachMVC
                     if (IsWin(_firstPlayer.move))
                     {
                         isWin = true;
-                        
                         MessageBox.Show($"Гравець {_firstPlayer.move} виграв");
 
                     }

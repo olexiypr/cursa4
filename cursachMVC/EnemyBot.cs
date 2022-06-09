@@ -78,7 +78,6 @@ namespace cursachMVC
         {
             List<Grid> possibleMoves = new List<Grid>();
             List<int> grades = new List<int>();
-            //possibleMoves = PosMov();
             for (int i = 0; i < _gameMap.GetLength(0); i++)
             {
                 for (int j = 0; j < _gameMap.GetLength(1); j++)
@@ -95,7 +94,6 @@ namespace cursachMVC
             {
                 grades.Add(GetGrade(move));
             });
-            
             int maxGrade = 0;
             int index = 0;
             for (int i=0; i<grades.Count; i++)
@@ -145,196 +143,115 @@ namespace cursachMVC
         ////
         private bool CheckDiagonalUpRight(string pattern, Grid move)
         {
-            int count = 0;
+            if (move.indexX + pattern.Length - 1 >= _gameMap.GetLength(0) || move.indexY - (pattern.Length - 1) >= _gameMap.GetLength(1) || move.indexY - (pattern.Length - 1) < 0)
+                return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                if (move.indexX+pattern.Length-1 >=_gameMap.GetLength(0) || move.indexY - (pattern.Length - 1) >= _gameMap.GetLength(1) || move.indexY - (pattern.Length - 1)<0)
-                    return false;
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY - i, move.indexX + i].Text == "" && pattern[i] == ' ') ||   /////ex
-                    _gameMap[move.indexY - i, move.indexX + i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch
+                if ((_gameMap[move.indexY-i, move.indexX+i].Text == "" &&  pattern[i] != ' ') || 
+                    _gameMap[move.indexY - i, move.indexX + i].Text != "" && pattern[i].ToString() != _gameMap[move.indexY - i, move.indexX + i].Text)
                 {
                     return false;
-                }*/
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckHorizontalRight(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexX + pattern.Length - 1 >= _gameMap.GetLength(1))
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY, move.indexX + i].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY, move.indexX + i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch { return false; }*/
+                if ((_gameMap[move.indexY, move.indexX + i].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY, move.indexX + i].Text != pattern[i].ToString() && _gameMap[move.indexY, move.indexX + i].Text != "")
+                {
+                    return false;
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
-        
         private bool CheckDiagonalyDownRigth(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexX + pattern.Length - 1 >= _gameMap.GetLength(0) || move.indexY + (pattern.Length - 1) >= _gameMap.GetLength(1))
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY + i, move.indexX + i].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY + i, move.indexX + i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch { return false; }*/
+                if ((_gameMap[move.indexY + i, move.indexX + i].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY + i, move.indexX + i].Text != pattern[i].ToString() && _gameMap[move.indexY + i, move.indexX + i].Text != "")
+                {
+                    return false;
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckDown(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexY + (pattern.Length - 1) >= _gameMap.GetLength(1))
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                //try
-               // {
-                    if ((_gameMap[move.indexY + i, move.indexX].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY + i, move.indexX].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                //}
-                //catch { return false;}
+                if ((_gameMap[move.indexY + i, move.indexX].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY + i, move.indexX].Text != pattern[i].ToString() && _gameMap[move.indexY + i, move.indexX].Text != "")
+                {
+                    return false;
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckDiagonalyDownLeft(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexX - (pattern.Length - 1) >= _gameMap.GetLength(0) || move.indexX- (pattern.Length - 1) < 0 || move.indexY + (pattern.Length - 1) >= _gameMap.GetLength(1))
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY + i, move.indexX - i].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY + i, move.indexX - i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch (IndexOutOfRangeException e)
+                if ((_gameMap[move.indexY + i, move.indexX - i].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY + i, move.indexX - i].Text != pattern[i].ToString() && _gameMap[move.indexY + i, move.indexX - i].Text!="")
                 {
                     return false;
-                }*/
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckHorizontalLeft (string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexX - (pattern.Length - 1) >= _gameMap.GetLength(0) || move.indexX - pattern.Length - 1 <0)
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY, move.indexX - i].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY, move.indexX - i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch (IndexOutOfRangeException e)
+                if ((_gameMap[move.indexY, move.indexX - i].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY, move.indexX - i].Text != pattern[i].ToString() && _gameMap[move.indexY, move.indexX - i].Text != "")
                 {
                     return false;
-                }*/
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckDiagonalUplLeft(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexX - (pattern.Length - 1) >= _gameMap.GetLength(0) || move.indexY - (pattern.Length - 1) >= _gameMap.GetLength(1) || move.indexX - pattern.Length - 1<0 || move.indexY - (pattern.Length - 1)<0)
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                /*try
-                {*/
-                    if ((_gameMap[move.indexY-i, move.indexX - i].Text == "" && pattern[i] == ' ') ||
-                    _gameMap[move.indexY-i, move.indexX - i].Text == pattern[i].ToString())
-                    {
-                        count++;
-                    }
-                /*}
-                catch (IndexOutOfRangeException e)
+                if ((_gameMap[move.indexY - i, move.indexX - i].Text == "" && pattern[i] != ' ') ||
+                    _gameMap[move.indexY - i, move.indexX - i].Text != pattern[i].ToString() && _gameMap[move.indexY - i, move.indexX - i].Text != "")
                 {
                     return false;
-                }*/
+                }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         private bool CheckUp(string pattern, Grid move)
         {
-            int count = 0;
             if (move.indexY - (pattern.Length - 1) >= _gameMap.GetLength(1) || move.indexY - (pattern.Length - 1)<0)
                 return false;
             for (int i = 0; i < pattern.Length; i++)
             {
-                if ((_gameMap[move.indexY - i, move.indexX].Text == "" && pattern[i] == ' ') ||    //////ex
-                    _gameMap[move.indexY - i, move.indexX].Text == pattern[i].ToString())
+                if ((_gameMap[move.indexY - i, move.indexX].Text == "" && pattern[i] != ' ') ||    //////ex
+                    _gameMap[move.indexY - i, move.indexX].Text != pattern[i].ToString() && _gameMap[move.indexY - i, move.indexX].Text != "")
                 {
-                    count++;
+                    return false;
                 }
             }
-            if (count == pattern.Length)
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
         ////
         ///////////Методи для перевірки співпадіння з паттерном у всих напрямках від можливого ходу///////////

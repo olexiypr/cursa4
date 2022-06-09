@@ -16,6 +16,7 @@ namespace cursachMVC
         {
             InitializeComponent();
             this.ControlBox = false;
+            this.Text = "Tic-tac-toe";
             StartPosition = FormStartPosition.CenterScreen;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             gameMode = mode;
@@ -35,8 +36,8 @@ namespace cursachMVC
 
         //ігровий режим (людина проти комп'ютера, людина проти комп'ютера з таймером,
         //людина проти людиин, людина проти людиин з таймером)
-        public string gameMode { get; private set; }  
-        private bool _isFirshHod;  //змінна для визначення чи був здійснений перший хід
+        public string gameMode { get; set; }  
+        public bool isFirstMove { get; set; }  //змінна для визначення чи був здійснений перший хід
         private int _sizeMap;  //розмір ігрового поля
         private int _countSecond;  //кількість секунд таймера
         public event EventHandler<EventArgs> OnGridClick;  //подія на натискання на игрове поле
@@ -112,7 +113,7 @@ namespace cursachMVC
         }
         private void OnStartButtonClick(object sender, EventArgs e) //початок гри
         {
-            _isFirshHod = true;
+            isFirstMove = true;
             Button grid = (Button)sender;
             EnabledButtons(true);
             if (gameMode.IndexOf("timer") !=-1)
@@ -124,19 +125,25 @@ namespace cursachMVC
                 gameMap[_sizeMap / 2, _sizeMap / 2].BackColor = Color.Green;
                 EnabledButtons(false);
                 DisableButtonsAfterMove(new Grid(_sizeMap/2, _sizeMap / 2));
-                _isFirshHod = false;
+                isFirstMove = false;
             }
         }
         private void OnClickGrid(object sender, EventArgs e)  //дія при натисканні на клітинку ігрового поля
         {
             Grid grid = (Grid)sender;
-            if (_isFirshHod)
+            if (isFirstMove)
             {
                 EnabledButtons(false);
-                _isFirshHod = false;
+                OnGridClick(sender, e);
+                isFirstMove = false;
+                DisableButtonsAfterMove(grid);
             }
-            DisableButtonsAfterMove(grid);
-            OnGridClick(sender, e);
+            else
+            {
+                DisableButtonsAfterMove(grid);
+                OnGridClick(sender, e);
+            }
+            
         }
         private void DisableButtonsAfterMove(Grid grid)  //обмеження доступних клітинок для ходу
         {
@@ -172,6 +179,20 @@ namespace cursachMVC
             }
             _countSecond = 30;
         }
-        
+        //подія при натисканні кнопки Escape для вибору режиму гри
+        //приховує цю форму і показує MenuForm
+        private void GameForm_KeyDown(object sender, KeyEventArgs e) 
+        {
+            if (e.KeyValue == (char)Keys.Escape)
+            {
+                MenuForm form = new MenuForm();
+                form.Show();
+                this.Hide();
+            }
+            if (e.KeyValue == (char)Keys.Enter)
+            {
+                OnStartButtonClick (_startButton, new EventArgs());
+            }
+        }
     }
 }

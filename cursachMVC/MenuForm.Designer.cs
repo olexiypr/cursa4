@@ -1,6 +1,6 @@
 ﻿namespace cursachMVC
 {
-    partial class Form1
+    partial class MenuForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -73,7 +73,7 @@
             this.label1.Text = "Виберіть режим гри";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // Form1
+            // MenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -83,9 +83,11 @@
             this.Controls.Add(this.timerCheckBox);
             this.Controls.Add(this.singleGameButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "Form1";
+            this.KeyPreview = true;
+            this.Name = "MenuForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tic-tac-toe";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
